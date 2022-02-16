@@ -1,64 +1,82 @@
 <template>
   <div>
-    <table>
-      <tr>
-        <td><input type="checkbox" @change="selectAll" />全选</td>
-        <td :colspan="4">服务器文件列表</td>
-      </tr>
-      <tr>
-        <td>选中文件</td>
-        <td>文件名称</td>
-        <td>文件类型</td>
-        <td>文件大小(kb)</td>
-        <td>创建时间</td>
-        <td>更新时间</td>
-      </tr>
-      <item v-for="file in files" :key="file.id" :file="file"></item>
-    </table>
+    <el-table
+      ref="FilesTable"
+      :data="files"
+      tooltip-effect="dark"
+      style="width: 100%"
+      :stripe="true"
+      @select="selectEvent"
+      @select-all="selectEvent"
+    >
+      <el-table-column type="selection" label="全选" align="center" width="55">
+      </el-table-column>
+      <el-table-column
+        label="文件名称"
+        align="center"
+        prop="file_name"
+        width="360"
+      >
+        <template slot-scope="scope">
+          <el-link :href="file_get_path + scope.row.file_name">
+            {{ scope.row.file_name }}
+          </el-link>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="file_type"
+        label="文件类型"
+        align="center"
+        width="200"
+      >
+      </el-table-column>
+      <el-table-column prop="file_size" label="文件大小(kb) " align="center">
+      </el-table-column>
+      <el-table-column prop="create_time" label="创建时间" align="center">
+        <template slot-scope="scope">
+          <p>{{ scope.row.create_time | time_filter }}</p>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="update_time"
+        label="更新时间"
+        show-overflow-tooltip
+      >
+        <template slot-scope="scope">
+          <p>{{ scope.row.update_time | time_filter }}</p>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
 <script>
-import item from "./Item.vue";
+import { mapState } from "vuex";
+
 export default {
   data() {
-    return {};
+    return { file_get_path: "http://124.223.105.216:2333/files/" };
   },
-  components: {
-    item,
+  computed: {
+    ...mapState(["files"]),
+  },
+  mounted() {
   },
   methods: {
-    selectAll(e){
-      this.$bus.$emit('selectAll', e.target.checked)
-    }
+    selectEvent() {
+      this.$refs.FilesTable.selection.forEach((select)=>{
+        this.$store.state.fileSelectedList.push(select)
+      })
+    },
   },
-  props: ["files"],
 };
 </script>
 
 <style>
-table {
-  align-content: center;
-  font-size: 14px;
-  border: 1px solid black;
-  border-radius: 4px;
-  position: relative;
-  width: 100%;
-  border-collapse: collapse;
-}
-
-td {
-  font-family: "Fira Sans";
-  align-content: center;
-  border: 1px solid burlywood;
-  border-radius: 3px;
-  text-align: center;
-}
-
-
-
-
-* {
-  font-family: "Segoe UI";
+.el-table__header .el-table-column--selection .cell .el-checkbox:after {
+  color: #333;
+  font-weight: bold;
+  content: "全选";
+  margin-left: 2px;
 }
 </style>

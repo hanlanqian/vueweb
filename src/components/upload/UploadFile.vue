@@ -1,56 +1,96 @@
 <template>
   <div>
-    <input ref="inputFile" type="file" @change="getfile" multiple="multiple" />
-    <button @click="upload_file">提交文件</button>
+    <el-row>
+      <el-col :span="6"></el-col>
+      <el-col :span="12">
+        <div>
+          <el-upload
+            ref="upload"
+            multiple
+            drag
+            :auto-upload="false"
+            :action="server_host + apis.upload_file"
+            :limit="10"
+            :data="file_info"
+            :file-list="fileList"
+            :before-upload="beforeUpload"
+            :before-remove="beforeRemove"
+            :on-success="successUpload"
+            :on-change="onChange"
+          ></el-upload>
+        </div>
+      </el-col>
+      <el-col :span="6"></el-col>
+    </el-row>
+    <el-button size="small" type="primary" @click="uploadButton"
+      >点击上传
+    </el-button>
+    <el-button size="small" type="primary" @click="clearAll">
+      清空待上传文件
+    </el-button>
   </div>
 </template>
 
 <script>
-const axios = require("axios");
+import { mapState } from "vuex";
 export default {
   data() {
     return {
-      Files: new FormData(),
+      fileList: [],
+      file_info: {},
     };
   },
-  props: ["server_host", "apis"],
+  computed: {
+    ...mapState(["apis", "server_host"]),
+  },
   methods: {
-    getfile(e) {
-      var files = e.target.files;
-
-      for (var i = 0; i < files.length; i++) {
-        this.Files.append(`data_${i}`, files[i]);
-        this.Files.append(
-          `fileinfo_${i}`,
-          JSON.stringify({
-            file_name: files[i].name,
-            file_size: files[i].size / 1024 / 1024,
-            file_type: files[i].type,
-          })
-        );
-      }
+    onChange(file, fileList) {
+      this.fileList = fileList;
     },
-    upload_file() {
-      axios({
-        method: "post",
-        headers: { "Content-Type": "multipart/form-data" },
-        url: this.server_host + this.apis.upload_file,
-        data: this.Files,
-      }).then((response) => {
-        console.log(response)
-        this.Files = new FormData();
-        this.$bus.$emit("updateList");
-        this.$refs.inputFile.value = ''
+    uploadButton() {
+      if (this.fileList.length === 0) {
+        this.$message({
+          message: "您还未选择任何文件！",
+          type: "warning",
+        });
+        return;
+      }
+      this.$confirm("确定上传所有文件吗？")
+        .then(async () => {
+          console.log(this.$refs.upload.submit());
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消全部上传",
+          });
+        });
+    },
+    beforeUpload(file) {
+      this.file_info.file_name = file.name.length > 60 ? file.name.substring(0, 60) : file.name
+      this.file_info.file_size = file.size / 1024 / 1024;
+      this.file_info.file_type = file.type.length > 60 ? file.type.split("/")[0] : file.type;
+    },
+    beforeRemove(file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`);
+    },
+    clearAll() {
+      this.$refs.upload.clearFiles();
+    },
+    successUpload(response, file, fileList) {
+      this.$message({
+        type: "success",
+        message: "上传成功!",
       });
+      setTimeout(() => {
+        fileList.splice(fileList.indexOf(file.name), 1);
+      }, 500);
+
+      this.$store.dispatch("get_data");
     },
   },
 };
 </script>
 
 <style scoped>
-button {
-  border: 1px solid rgb(218, 120, 120);
-  background-color: transparent;
-  border-radius: 2px;
-}
 </style>

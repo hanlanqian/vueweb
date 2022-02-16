@@ -13,11 +13,6 @@ export default {
   name: "NavigationBar",
   data() {
     return {
-      catalogue: [
-        { name: "UserInfo", path: "/UserInfo" },
-        { name: "UploadFile", path: "/Upload" },
-        {name:'Home', path:'/home'}
-      ],
     };
   },
 };
