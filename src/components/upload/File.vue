@@ -1,21 +1,29 @@
 <template>
-  <div>
+  <el-row>
     <el-table
       ref="FilesTable"
       :data="files"
       tooltip-effect="dark"
       style="width: 100%"
       :stripe="true"
+      :height="380"
       @select="selectEvent"
       @select-all="selectEvent"
     >
-      <el-table-column type="selection" label="全选" align="center" width="55">
+      <el-table-column
+        type="selection"
+        label="全选"
+        align="center"
+        width="55"
+        show-overflow-tooltip
+      >
       </el-table-column>
       <el-table-column
         label="文件名称"
         align="center"
         prop="file_name"
         width="360"
+        show-overflow-tooltip
       >
         <template slot-scope="scope">
           <el-link :href="file_get_path + scope.row.file_name">
@@ -26,13 +34,23 @@
       <el-table-column
         prop="file_type"
         label="文件类型"
+        show-overflow-tooltip
         align="center"
-        width="200"
       >
       </el-table-column>
-      <el-table-column prop="file_size" label="文件大小(kb) " align="center">
+      <el-table-column
+        prop="file_size"
+        label="文件大小(mb) "
+        show-overflow-tooltip
+        align="center"
+      >
       </el-table-column>
-      <el-table-column prop="create_time" label="创建时间" align="center">
+      <el-table-column
+        prop="create_time"
+        label="创建时间"
+        show-overflow-tooltip
+        align="center"
+      >
         <template slot-scope="scope">
           <p>{{ scope.row.create_time | time_filter }}</p>
         </template>
@@ -41,13 +59,14 @@
         prop="update_time"
         label="更新时间"
         show-overflow-tooltip
+        align="center"
       >
         <template slot-scope="scope">
           <p>{{ scope.row.update_time | time_filter }}</p>
         </template>
       </el-table-column>
     </el-table>
-  </div>
+  </el-row>
 </template>
 
 <script>
@@ -60,13 +79,12 @@ export default {
   computed: {
     ...mapState(["files"]),
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     selectEvent() {
-      this.$refs.FilesTable.selection.forEach((select)=>{
-        this.$store.state.fileSelectedList.push(select)
-      })
+      this.$refs.FilesTable.selection.forEach((select) => {
+        this.$store.state.fileSelectedList.push(select);
+      });
     },
   },
 };
@@ -78,5 +96,8 @@ export default {
   font-weight: bold;
   content: "全选";
   margin-left: 2px;
+}
+.el-row {
+  margin-bottom: 10px;
 }
 </style>

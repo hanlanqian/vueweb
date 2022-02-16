@@ -14,29 +14,30 @@ const actions = {
                 context.commit("getData", receieve_data)
             });
     },
-
-    upload_file(context, value) {
-        axios({
-            method: "post",
-            headers: { "Content-Type": "multipart/form-data" },
-            url: context.state.server_host + context.state.apis.upload_file,
-            data: value
-        }).then((response) => {
-            console.log(response)
-            context.dispatch("get_data")
-        });
-    },
     delete_selected_file(context) {
-        console.log(context.getters.fileNameList) 
+        console.log(context.getters.fileNameList)
         axios.post(context.state.server_host + context.state.apis.delete_file, context.getters.fileNameList)
             .then((response) => {
                 console.log(response);
                 context.dispatch("get_data")
             });
     },
-    download_selected_file(context, value){
-        
+    download_selected_file(context, value) {
+
+    },
+    login_auth(context, value) {
+        axios({
+            method: 'post',
+            url: context.state.server_host + context.state.apis.login_auth,
+            data: {
+                username: value.username,
+                password: value.password
+            }
+        }).then((response) => {
+            console.log(response)
+        })
     }
+
 }
 const mutations = {
     getData(state, value) {
@@ -50,15 +51,16 @@ const state = {
         get_file_list: "/file/get",
         delete_file: "/file/delete",
         upload_file: "/file/upload",
-        download_file: "/files"
+        download_file: "/files",
+        login_auth: '/login'
     },
     files: []
 }
 
 const getters = {
-    fileNameList(state){
+    fileNameList(state) {
         var file_name_list = []
-        state.fileSelectedList.forEach((select)=>{
+        state.fileSelectedList.forEach((select) => {
             file_name_list.push(select.file_name)
         })
         return file_name_list

@@ -1,29 +1,28 @@
 <template>
-  <div>
-    <uploadFile/>
-    <file/>
+  <el-container>
+    <el-main>
+    <uploadFile />
+    <file />
     <operater />
-  </div>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
 import file from "../components/upload/File.vue";
 import uploadFile from "../components/upload/UploadFile.vue";
 import operater from "../components/upload/Operater.vue";
-import axios from "axios";
-import {mapState} from 'vuex'
+import { mapState } from "vuex";
 
 export default {
   name: "Upload",
   components: { file, uploadFile, operater },
   data() {
-    return {
-    };
+    return {};
   },
-  computed: {
-  },
+  computed: {},
   created() {
-    this.getdata()
+    this.getdata();
   },
   mounted() {
     this.$bus.$on("selectAll", this.selectAll);
@@ -32,10 +31,10 @@ export default {
   },
   methods: {
     getdata() {
-      this.$store.dispatch("get_data")
+      this.$store.dispatch("get_data");
     },
     delete_selected() {
-      this.$store.dispatch("delete_selected_file")
+      this.$store.dispatch("delete_selected_file");
     },
   },
 };

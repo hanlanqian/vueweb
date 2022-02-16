@@ -3,7 +3,7 @@ import App from './App.vue'
 import VueRouter from 'vue-router'
 import router from './router/index'
 import store from './store/index'
-import { MessageBox, Message, Button, Table, Checkbox, TableColumn, Link, Input, Upload, Menu, MenuItem, Submenu, Row, Col } from 'element-ui'
+import {Form, FormItem, Aside, Main, Header, Container, MessageBox, Message, Button, Table, Checkbox, TableColumn, Link, Input, Upload, Menu, MenuItem, Submenu, Row, Col } from 'element-ui'
 const dayjs = require('dayjs')
 
 
@@ -23,9 +23,15 @@ Vue.component(Submenu.name, Submenu)
 Vue.component(MenuItem.name, MenuItem)
 Vue.component(Row.name, Row)
 Vue.component(Col.name, Col)
-// Vue.component(Col.name, Col)
-// Vue.component(Col.name, Col)
-// Vue.component(Col.name, Col)
+Vue.component(Container.name, Container)
+Vue.component(Aside.name, Aside)
+Vue.component(Main.name, Main)
+Vue.component(Header.name, Header)
+Vue.component(FormItem.name, FormItem)
+Vue.component(Form.name, Form)
+// Vue.component(FormItem.name, FormItem)
+// Vue.component(FormItem.name, FormItem)
+// Vue.component(FormItem.name, FormItem)
 Vue.prototype.$confirm = MessageBox.confirm
 Vue.prototype.$message = Message
 
