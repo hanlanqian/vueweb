@@ -5,28 +5,59 @@ import Home from "../pages/Home.vue"
 import Upload from '../pages/Upload.vue'
 import Login from '../pages/Login.vue'
 // import  
-export default new VueRouter({
+const router = new VueRouter({
     mode: 'history',
-    routes:[
+    routes: [
         {
-            path: '/',
-            component: Login
+            name: 'login',
+            path: '/login',
+            component: Login,
+
         },
         {
+            name: 'userInfo',
             path: '/UserInfo',
-            component: UserInfo
+            component: UserInfo,
+            meta: {
+                requireAuth: true
+            }
         },
         {
+            name: 'home',
             path: '/Home',
             component: Home
         },
         {
+            name: 'upload',
             path: '/Upload',
-            component: Upload
+            component: Upload,
+            meta: {
+                requireAuth: true
+            }
         },
 
     ]
 })
 
+// router.beforeEach((to, from, next) => {
+//     console.log(this)
+//     console.log(from)
+//     if (to.meta.requireAuth) {
+//         if (sessionStorage.getItem('accessToken')) {
+//             next()
+//         } else {
+//             console.log(this)
+//             console.log('test')
+//             next("/login")
+//         }
+//     }
+//     else {
+//         next()
+//     }
+// })
+
+
+
+export default router
 
 

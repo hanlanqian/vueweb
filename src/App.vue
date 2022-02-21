@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header><navigation-bar></navigation-bar></el-header>
-    <el-container><router-view></router-view></el-container>
+    <el-main><router-view></router-view></el-main>
   </el-container>
 </template>
 
@@ -17,8 +17,9 @@ export default {
 </script>
 
 
-    DisplayArea<style>
-body {
-  background: #fff;
-}
+<style scoped>
+  .el-container{
+    height: 100%;
+    background-color: antiquewhite;
+  }
 </style>

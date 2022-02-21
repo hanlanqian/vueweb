@@ -36,7 +36,27 @@ const actions = {
         }).then((response) => {
             console.log(response)
         })
-    }
+    },
+    register(context, value) {
+        console.log({
+            username: value.userName,
+            password: value.passWord,
+            email: value.email,
+            phoneNumber: value.phoneNumber,
+            sex: value.sex 
+        })
+        axios({
+            method: 'post',
+            url:context.state.server_host + context.state.apis.register,
+            data: {
+                username: value.userName,
+                password: value.passWord,
+                email: value.email,
+                phoneNumber: value.phoneNumber,
+                sex: value.sex 
+            }
+        })
+    },
 
 }
 const mutations = {
@@ -45,14 +65,23 @@ const mutations = {
     }
 }
 const state = {
+
+    // 用户状态
+    isLogin: false,
+
+
+
+    // 文件上传状态
     fileSelectedList: [],
     server_host: "http://124.223.105.216:2333",
     apis: {
-        get_file_list: "/file/get",
-        delete_file: "/file/delete",
-        upload_file: "/file/upload",
-        download_file: "/files",
-        login_auth: '/login'
+        get_file_list: "/api/file/get",
+        delete_file: "/api/file/delete",
+        upload_file: "/api/file/upload",
+        download_file: "/api/files",
+        login_auth: '/api/login',
+        register: '/api/register',
+
     },
     files: []
 }
